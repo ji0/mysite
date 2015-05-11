@@ -1,4 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="fn"%>
+
+
 <!doctype html>
 <html>
 <head>
@@ -9,7 +15,9 @@
 <body>
 	<div id="container">
 		<div id="header">
-			<jsp:include page="/views/include/header.jsp" flush="false"/>
+			<c:import url="/views/include/header.jsp">
+			</c:import>
+		
 		</div>
 		<div id="content">
 			<div id="user">
@@ -21,11 +29,14 @@
 			</div>
 		</div>
 		<div id="navigation">
-			<jsp:include page="/views/include/navigation.jsp"/>
+			<c:import url="/views/include/navigation.jsp">
+			</c:import>
+		
 		</div>
 		<div id="footer">
-			<jsp:include page="/views/include/footer.jsp"/>
-		</div>
+			<c:import url="/views/include/footer.jsp">
+			</c:import>
+			</div>
 	</div>
 </body>
 </html>
