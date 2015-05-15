@@ -25,19 +25,20 @@ public class BoardDAO {
 		return con;
 	}
 
-	public void insert(BoardVO vo, String member_name)
+	public void insert(BoardVO vo, Long member_no, String member_name)
 			throws ClassNotFoundException, SQLException {
 		Connection con = getConnection();
 
-		String sql = "insert into board values(board_seq.nextval, ?, ?, ?, ?, ?, sysdate )";
+		String sql = "insert into board values(board_no_seq.nextval, ?, ?, ?, ?, ?, sysdate )";
 
 		PreparedStatement pstmt = con.prepareStatement(sql);
 
+		System.out.println(member_no);
 		pstmt.setString(1, vo.getTitle());
 		pstmt.setString(2, vo.getContent());
-		pstmt.setString(3, vo.getMember_no());
+		pstmt.setLong(3, member_no);
 		pstmt.setString(4, member_name);
-		pstmt.setString(5, vo.getView_cnt());
+		pstmt.setLong(5, 0);
 
 		pstmt.executeUpdate();
 
@@ -51,7 +52,7 @@ public class BoardDAO {
 
 	}
 
-	public void edit(BoardVO vo, String member_name)
+	public void modify(BoardVO vo, Long no)
 			throws ClassNotFoundException, SQLException {
 		Connection con = getConnection();
 
@@ -61,7 +62,31 @@ public class BoardDAO {
 
 		pstmt.setString(1, vo.getTitle());
 		pstmt.setString(2, vo.getContent());
-		pstmt.setLong(3, vo.getNo());
+		pstmt.setLong(3, no);
+
+		pstmt.executeUpdate();
+
+		if (pstmt != null) {
+			pstmt.close();
+		}
+
+		if (con != null) {
+			con.close();
+		}
+
+	}
+	
+	
+	public void plus_view_cnt(Long no, Long view_cnt)
+			throws ClassNotFoundException, SQLException {
+		Connection con = getConnection();
+
+		String sql = "update board SET view_cnt = ? where no = ?";
+
+		PreparedStatement pstmt = con.prepareStatement(sql);
+
+		pstmt.setLong(1, view_cnt);
+		pstmt.setLong(2, no);
 
 		pstmt.executeUpdate();
 
@@ -75,17 +100,16 @@ public class BoardDAO {
 
 	}
 
-	public void delete(Long no, String password) throws ClassNotFoundException,
+	public void delete(Long no) throws ClassNotFoundException,
 			SQLException {
 
 		Connection con = getConnection();
 		Statement stmt = con.createStatement();
-		String sql = "delete from Board where no = ? and password = ?";
+		String sql = "delete from board where no = ?";
 
 		PreparedStatement pstmt = con.prepareStatement(sql);
 
 		pstmt.setLong(1, no);
-		pstmt.setString(2, password);
 
 		pstmt.executeUpdate();
 
@@ -127,7 +151,7 @@ public class BoardDAO {
 		pstmt.setLong(1, no);
 
 		// rs 생성
-		ResultSet rs = pstmt.executeQuery(sql);
+		ResultSet rs = pstmt.executeQuery();
 
 		BoardVO vo = new BoardVO();
 		// 결과처리
@@ -136,10 +160,10 @@ public class BoardDAO {
 			Long no2 = rs.getLong(1);
 			String title = rs.getString(2);
 			String content = rs.getString(3);
-			String member_no = rs.getString(4);
+			Long member_no = rs.getLong(4);
 			String member_name = rs.getString(5);
-			String view_cnt = rs.getString(5);
-			String reg_date = rs.getString(5);
+			Long view_cnt = rs.getLong(6);
+			String reg_date = rs.getString(7);
 
 			vo.setNo(no2);
 			vo.setTitle(title);
@@ -177,7 +201,7 @@ public class BoardDAO {
 
 		// 2 statement 생성
 		Statement stmt = con.createStatement();
-		String sql = "select * from Board";
+		String sql = "select * from board";
 
 		// rs 생성
 		ResultSet rs = stmt.executeQuery(sql);
@@ -188,10 +212,10 @@ public class BoardDAO {
 			Long no = rs.getLong(1);
 			String title = rs.getString(2);
 			String content = rs.getString(3);
-			String member_no = rs.getString(4);
+			Long member_no = rs.getLong(4);
 			String member_name = rs.getString(5);
-			String view_cnt = rs.getString(5);
-			String reg_date = rs.getString(5);
+			Long view_cnt = rs.getLong(6);
+			String reg_date = rs.getString(7);;
 
 			BoardVO vo = new BoardVO();
 			vo.setNo(no);

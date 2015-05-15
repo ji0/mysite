@@ -1,8 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8"
 	import="java.util.*, com.sds.icto.mysite.vo.GuestBookVO"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <%
-	List<GuestBookVO> list = (List<GuestBookVO>) request
-			.getAttribute("list");
+	pageContext.setAttribute("newLineChar", "\n");
 %>
 
 <!doctype html>
@@ -39,28 +42,23 @@
 					</table>
 				</form>
 				<ul>
-					<li>
-						<%
-							for (GuestBookVO vo : list) {
-						%>
-						<table>
-							<td>[<%=vo.getNo()%>]
-							</td>
-							<td><%=vo.getName()%></td>
-							<td><%=vo.getReg_date()%></td>
+					<li><c:forEach items="${list }" var="vo" varStatus="status">
+							<table>
+								<td>[${vo.no}]</td>
+								<td>${vo.name}</td>
+								<td>${vo.reg_date}</td>
 
 
-							<td><a
-								href="/mysite/guestbook?a=deleteform&no=<%=vo.getNo()%>">삭제</a></td>
+								<td><a href="/mysite/guestbook?a=deleteform&no=${vo.no}">삭제</a></td>
 
-							</tr>
-							<tr>
-								<td colspan=4><%=vo.getMessage()%></td>
-							</tr>
-						</table> <br> <%
- 	}
- %> <br>
-					</li>
+								</tr>
+								<tr>
+									<td colspan=4>${fn:replace(vo.message, newLineChar, "<br>"
+										) }</td>
+								</tr>
+							</table>
+							<br>
+						</c:forEach> <br></li>
 				</ul>
 			</div>
 		</div>
