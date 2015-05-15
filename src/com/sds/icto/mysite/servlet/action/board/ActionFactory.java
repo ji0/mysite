@@ -39,6 +39,8 @@ public class ActionFactory {
 			act = new ModifyFormAction();
 		}else if("writeform".equals(a)){
 			act = new WriteFormAction();
+		}else if("search".equals(a)){
+			act = new SearchAction();
 		}
 		
 		if (act == null) {

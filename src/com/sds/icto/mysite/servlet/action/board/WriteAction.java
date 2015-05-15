@@ -29,7 +29,7 @@ public class WriteAction implements Action {
 		
 			
 		request.setCharacterEncoding("utf-8");
-
+	
 		
 		// 이메일을 등록합니다.
 		// 인서트 끝났는데 결과 쟤한테 알아왕

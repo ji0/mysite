@@ -52,8 +52,8 @@ public class BoardDAO {
 
 	}
 
-	public void modify(BoardVO vo, Long no)
-			throws ClassNotFoundException, SQLException {
+	public void modify(BoardVO vo, Long no) throws ClassNotFoundException,
+			SQLException {
 		Connection con = getConnection();
 
 		String sql = "update board SET title = ?, content = ? where no = ?";
@@ -75,8 +75,7 @@ public class BoardDAO {
 		}
 
 	}
-	
-	
+
 	public void plus_view_cnt(Long no, Long view_cnt)
 			throws ClassNotFoundException, SQLException {
 		Connection con = getConnection();
@@ -100,8 +99,7 @@ public class BoardDAO {
 
 	}
 
-	public void delete(Long no) throws ClassNotFoundException,
-			SQLException {
+	public void delete(Long no) throws ClassNotFoundException, SQLException {
 
 		Connection con = getConnection();
 		Statement stmt = con.createStatement();
@@ -215,7 +213,8 @@ public class BoardDAO {
 			Long member_no = rs.getLong(4);
 			String member_name = rs.getString(5);
 			Long view_cnt = rs.getLong(6);
-			String reg_date = rs.getString(7);;
+			String reg_date = rs.getString(7);
+			;
 
 			BoardVO vo = new BoardVO();
 			vo.setNo(no);
@@ -236,6 +235,67 @@ public class BoardDAO {
 
 		if (stmt != null) {
 			stmt.close();
+		}
+
+		if (con != null) {
+			con.close();
+		}
+
+		return list;
+	}
+
+	public List<BoardVO> search(String kwd) throws ClassNotFoundException,
+			SQLException {
+
+		List<BoardVO> list = new ArrayList<BoardVO>();
+
+		// 1 connection 생성
+		Connection con = getConnection();
+
+		
+	
+		
+		
+		// 2 statement 생성
+		String sql = "select * from board where content like ?";
+
+		PreparedStatement pstmt = con.prepareStatement(sql);
+
+		pstmt.setString(1, "%" + kwd + "%");
+		// rs 생성
+		ResultSet rs = pstmt.executeQuery();
+
+		// 결과처리
+		while (rs.next()) {
+
+			Long no = rs.getLong(1);
+			String title = rs.getString(2);
+			String content = rs.getString(3);
+			Long member_no = rs.getLong(4);
+			String member_name = rs.getString(5);
+			Long view_cnt = rs.getLong(6);
+			String reg_date = rs.getString(7);
+			;
+
+			BoardVO vo = new BoardVO();
+			vo.setNo(no);
+			vo.setTitle(title);
+			vo.setContent(content);
+			vo.setMember_no(member_no);
+			vo.setMember_name(member_name);
+			vo.setView_cnt(view_cnt);
+			vo.setReg_date(reg_date);
+			list.add(vo);
+
+		}
+
+		// 자원정리
+		if (rs != null) {
+			rs.close();
+		}
+
+		if (pstmt != null) {
+			pstmt.close();
 		}
 
 		if (con != null) {
